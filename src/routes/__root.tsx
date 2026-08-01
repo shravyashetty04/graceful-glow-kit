@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Shravya Shetty — Software Engineer" },
+      { name: "description", content: "Portfolio of Shravya Shetty, software engineer — experience, projects, skills and an interactive drivable 3D intro." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Shravya Shetty — Software Engineer" },
+      { property: "og:description", content: "Portfolio of Shravya Shetty, software engineer — experience, projects, skills and an interactive drivable 3D intro." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Shravya Shetty — Software Engineer" },
+      { name: "twitter:description", content: "Portfolio of Shravya Shetty, software engineer — experience, projects, skills and an interactive drivable 3D intro." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0eb17943-0783-4f8f-969c-db61895a3baf" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0eb17943-0783-4f8f-969c-db61895a3baf" },
     ],
     links: [
       {

@@ -876,6 +876,7 @@
     const hudCompass   = document.getElementById('hudCompass');
     const hudArrow     = document.getElementById('hudArrow');
     const hudText      = document.getElementById('hudText');
+    const replayBtn    = document.getElementById('replayBtn');
     const isTouch      = matchMedia('(pointer: coarse)').matches;
     const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1059,15 +1060,40 @@
       loadbarFill.style.width = progress + '%';
     }, 140);
 
+    let introBlend = 0;      // 0 = cinematic orbit, 1 = full chase cam
+    let replaying = false;
+
     function beginDrive(){
       if(started) return;
       started = true;
+      introBlend = 0;
       gate.classList.add('hidden');
       introHint.style.display = 'block';
       hudCompass.classList.add('show');
+      replayBtn.classList.add('show');
       shell.focus();
     }
     startBtn.addEventListener('click', beginDrive);
+
+    /* ----- replay: ease the car and camera back to the opening shot ----- */
+    function replayIntro(){
+      replayBtn.classList.add('spinning');
+      setTimeout(()=> replayBtn.classList.remove('spinning'), 520);
+      replaying = true;
+      speed = 0; steerSmooth = 0; leanSmooth = 0; pitchSmooth = 0;
+      car.position.set(0, 0, 12);
+      heading = Math.PI;
+      car.rotation.set(0, heading, 0);
+      introBlend = 0;
+      t = 0;
+      portals.forEach(p=>{ p.cooldown = 90; });
+      keyState.up = keyState.down = keyState.left = keyState.right = false;
+      mouseDriving = false;
+      showToast('Intro replayed — drive again');
+      shell.scrollIntoView({ behavior:'smooth', block:'center' });
+      setTimeout(()=>{ replaying = false; }, 900);
+    }
+    replayBtn.addEventListener('click', (e)=>{ e.stopPropagation(); replayIntro(); });
     shell.addEventListener('click', ()=>{ if(progress>=100) beginDrive(); });
     window.addEventListener('keydown', (e)=>{ if(progress>=100 && keyMap[e.code]) beginDrive(); });
 
@@ -1082,7 +1108,15 @@
 
     /* ----- car physics (arcade-style) ----- */
     let speed = 0, heading = Math.PI; // face toward center (portals) at start
+    let steerSmooth = 0, leanSmooth = 0, pitchSmooth = 0;
     const maxSpeed = 0.34, accel = 0.018, brake = 0.03, friction = 0.05, turnRate = 0.04;
+    const clock = new THREE.Clock();
+    const camTarget = new THREE.Vector3(0, 1, -22);
+    const desiredCam = new THREE.Vector3();
+    const orbitCam = new THREE.Vector3();
+    // frame-rate independent smoothing: same feel at 60fps and 144fps
+    const smooth = (rate, scale) => 1 - Math.pow(1 - rate, scale);
+    const easeInOut = (x) => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
 
     const projected = new THREE.Vector3();
     function updateLabels(){
@@ -1127,22 +1161,26 @@
     function animate(){
       requestAnimationFrame(animate);
       try{
-      t += 0.016;
+      const dt = Math.min(clock.getDelta(), 0.05);   // clamp tab-switch spikes
+      const scale = dt * 60;                          // 1.0 at 60fps
+      t += dt;
 
       if(started){
         const driveForward = keyState.up || mouseDriving;
         const driveBack = keyState.down;
-        if(driveForward) speed += accel;
-        else if(driveBack) speed -= brake;
-        else speed *= (1 - friction);
+        if(driveForward) speed += accel * scale;
+        else if(driveBack) speed -= brake * scale;
+        else speed *= Math.pow(1 - friction, scale);
         speed = Math.max(-maxSpeed*0.55, Math.min(maxSpeed, speed));
 
         let turnInput = (keyState.left ? 1 : 0) - (keyState.right ? 1 : 0);
         if(mouseDriving) turnInput = mouseSteer;
-        heading += turnInput * turnRate * (0.4 + Math.abs(speed)/maxSpeed*0.6);
+        // ease steering instead of snapping between -1 / 0 / 1
+        steerSmooth += (turnInput - steerSmooth) * smooth(0.16, scale);
+        heading += steerSmooth * turnRate * scale * (0.4 + Math.abs(speed)/maxSpeed*0.6);
 
-        car.position.x += Math.sin(heading) * speed;
-        car.position.z += Math.cos(heading) * speed;
+        car.position.x += Math.sin(heading) * speed * scale;
+        car.position.z += Math.cos(heading) * speed * scale;
 
         // soft boundary (box around the path, not a circle around the origin)
         if(car.position.x > 30){ car.position.x = 30; speed *= 0.5; }
@@ -1151,23 +1189,46 @@
         if(car.position.z < -52){ car.position.z = -52; speed *= 0.5; }
 
         car.rotation.y = heading;
-        wheels.forEach(w=> w.rotation.x -= speed*1.6);
 
-        // camera chase
-        const camDist = 6.4, camHeight = 3.2;
-        const desired = new THREE.Vector3(
+        // body roll into corners + squat/dive under throttle and braking
+        const targetLean = -steerSmooth * (Math.abs(speed)/maxSpeed) * 0.14;
+        const targetPitch = (driveForward ? -0.035 : driveBack ? 0.05 : 0) * (0.4 + Math.abs(speed)/maxSpeed);
+        leanSmooth  += (targetLean  - leanSmooth)  * smooth(0.1, scale);
+        pitchSmooth += (targetPitch - pitchSmooth) * smooth(0.08, scale);
+        car.rotation.z = leanSmooth;
+        car.rotation.x = pitchSmooth;
+
+        wheels.forEach(w=> w.rotation.x -= speed*1.6*scale);
+
+        // camera chase — pulls back a little with speed for a sense of rush
+        const camDist = 6.4 + Math.abs(speed)/maxSpeed * 1.3;
+        const camHeight = 3.2 - Math.abs(speed)/maxSpeed * 0.25;
+        desiredCam.set(
           car.position.x - Math.sin(heading)*camDist,
           camHeight,
           car.position.z - Math.cos(heading)*camDist
         );
-        camera.position.lerp(desired, 0.07);
-        camera.lookAt(car.position.x, car.position.y + 0.9, car.position.z);
+
+        // ease out of the establishing orbit into the chase cam over ~1.4s
+        if(introBlend < 1){
+          introBlend = Math.min(1, introBlend + dt / 1.4);
+          orbitCam.set(Math.sin(t*0.05)*24, 11, -22 + Math.cos(t*0.05)*24);
+          desiredCam.lerpVectors(orbitCam, desiredCam, easeInOut(introBlend));
+        }
+
+        camera.position.lerp(desiredCam, smooth(introBlend < 1 ? 0.12 : 0.08, scale));
+        // smooth the look-at point too, so the horizon never jitters
+        camTarget.lerp(
+          new THREE.Vector3(car.position.x, car.position.y + 0.9, car.position.z),
+          smooth(0.14, scale)
+        );
+        camera.lookAt(camTarget);
 
         // portal collisions
         portals.forEach(p=>{
-          p.cooldown = Math.max(0, p.cooldown - 1);
+          p.cooldown = Math.max(0, p.cooldown - scale);
           const d = Math.hypot(car.position.x - p.pos.x, car.position.z - p.pos.z);
-          if(d < 2.6 && p.cooldown === 0){
+          if(d < 2.6 && p.cooldown === 0 && !replaying){
             p.cooldown = 240;
             const firstVisit = !p.visited;
             p.visited = true;
@@ -1196,15 +1257,18 @@
       } else {
         // idle establishing shot before drive starts — orbit above the middle of the course
         camera.position.set(Math.sin(t*0.05)*24, 11, -22 + Math.cos(t*0.05)*24);
-        camera.lookAt(0, 1, -22);
+        camTarget.set(0, 1, -22);
+        camera.lookAt(camTarget);
       }
 
       if(!prefersReduced){
+        const spin = scale;
         portals.forEach((p,i)=>{
-          p.glyph.rotation.x += 0.006 + i*0.0008;
-          p.glyph.rotation.y += 0.008;
-          p.glyph.position.y = 2.6 + Math.sin(t + i)*0.18;
-          p.ring.rotation.z += 0.003;
+          p.glyph.rotation.x += (0.006 + i*0.0008) * spin;
+          p.glyph.rotation.y += 0.008 * spin;
+          p.glyph.position.y = 2.6 + Math.sin(t*1.1 + i)*0.18;
+          p.ring.rotation.z += 0.003 * spin;
+          p.ring.scale.setScalar(1 + Math.sin(t*1.4 + i*0.7)*0.012);
         });
       }
 

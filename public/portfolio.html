@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" onload="this.rel='stylesheet'">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap"></noscript>
 <style>
@@ -893,9 +892,17 @@
     scene.fog = new THREE.Fog(BG, 22, 62);
 
     const camera = new THREE.PerspectiveCamera(58, shell.clientWidth/shell.clientHeight, 0.1, 120);
-    const renderer = new THREE.WebGLRenderer({ antialias:true });
+    const dprCap = isTouch ? 1.5 : 1.75;
+    const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
+    // Antialiasing is essentially free visually above 1.5x DPR, but costs a lot of fill rate.
+    const renderer = new THREE.WebGLRenderer({
+      antialias: dpr < 1.5,
+      powerPreference: 'high-performance',
+      stencil: false,
+      alpha: false
+    });
     renderer.setSize(shell.clientWidth, shell.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(dpr);
     shell.insertBefore(renderer.domElement, gate);
 
     scene.add(new THREE.AmbientLight(0xd9b26c, 0.6));
@@ -1018,7 +1025,7 @@
       const on = (e)=>{ e.preventDefault(); e.stopPropagation(); keyState[k]=true; };
       const off = (e)=>{ e.preventDefault(); e.stopPropagation(); keyState[k]=false; };
       btn.addEventListener('touchstart', on, {passive:false});
-      btn.addEventListener('touchend', off);
+      btn.addEventListener('touchend', off, {passive:true});
       btn.addEventListener('mousedown', on);
       btn.addEventListener('mouseup', off);
       btn.addEventListener('mouseleave', off);
@@ -1036,7 +1043,7 @@
       const rect = shell.getBoundingClientRect();
       mouseSteer = ((e.clientX - rect.left) / rect.width - 0.5) * -2;
     });
-    window.addEventListener('mouseup', ()=>{ mouseDriving = false; });
+    window.addEventListener('mouseup', ()=>{ mouseDriving = false; }, { passive:true });
     shell.addEventListener('touchstart', (e)=>{
       if(!started || e.target.closest('.dpad')) return;
       mouseDriving = true;
@@ -1050,7 +1057,7 @@
       mouseSteer = ((e.touches[0].clientX - rect.left) / rect.width - 0.5) * -2;
       e.preventDefault();
     }, {passive:false});
-    window.addEventListener('touchend', ()=>{ mouseDriving = false; });
+    window.addEventListener('touchend', ()=>{ mouseDriving = false; }, { passive:true });
 
     /* ----- loading gate ----- */
     let progress = 0;
@@ -1163,8 +1170,30 @@
     }
 
     let t = 0;
+    let rafId = 0, heroVisible = true, pageVisible = true;
+    function loopRunning(){ return heroVisible && pageVisible; }
+    function resumeLoop(){
+      if(rafId || !loopRunning()) return;
+      clock.getDelta();            // drop the idle gap so physics don't jump
+      rafId = requestAnimationFrame(animate);
+    }
+    function pauseLoop(){
+      if(rafId){ cancelAnimationFrame(rafId); rafId = 0; }
+    }
+    // Stop burning GPU/CPU while the 3D scene is scrolled away or the tab is hidden.
+    if('IntersectionObserver' in window){
+      new IntersectionObserver((entries)=>{
+        heroVisible = entries[0].isIntersecting;
+        loopRunning() ? resumeLoop() : pauseLoop();
+      }, { threshold:0 }).observe(shell);
+    }
+    document.addEventListener('visibilitychange', ()=>{
+      pageVisible = !document.hidden;
+      loopRunning() ? resumeLoop() : pauseLoop();
+    });
+
     function animate(){
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
       try{
       const dt = Math.min(clock.getDelta(), 0.05);   // clamp tab-switch spikes
       const scale = dt * 60;                          // 1.0 at 60fps
@@ -1287,15 +1316,23 @@
         if(typeof unlockAll === 'function') unlockAll();
       }
     }
-    animate();
+    resumeLoop();
 
+    let resizeRaf = 0;
     function onResize(){
-      const w = shell.clientWidth, h = shell.clientHeight;
-      camera.aspect = w/h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      // Coalesce resize storms into one layout+GL resize per frame.
+      if(resizeRaf) return;
+      resizeRaf = requestAnimationFrame(()=>{
+        resizeRaf = 0;
+        const w = shell.clientWidth, h = shell.clientHeight;
+        if(!w || !h) return;
+        camera.aspect = w/h;
+        camera.updateProjectionMatrix();
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprCap));
+        renderer.setSize(w, h);
+      });
     }
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', onResize, { passive:true });
     } catch(err){
       console.error(err);
       const gateEl = document.getElementById('introGate');

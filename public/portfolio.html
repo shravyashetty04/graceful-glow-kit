@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<script>document.documentElement.classList.remove('no-js');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shravya Shetty — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b100f;
+    --bg-panel: #101614;
+    --bg-card: #131a18;
+    --line: #2a3630;
+    --line-soft: #1e2724;
+    --hi: #f4ece0;
+    --lo: #a8a89a;
+    --lo-dim: #78786c;
+    --violet: #d9b26c;
+    --violet-dim: rgba(217,178,108,0.12);
+    --coral: #d98f6b;
+    --signal: #93c9a8;
+    --signal-dim: rgba(147,201,168,0.14);
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Cormorant Garamond', serif;
+    --body: 'Karla', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -6%, rgba(217,178,108,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(217,143,107,0.05), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(217,178,108,0.025) 0px, rgba(217,178,108,0.025) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(217,178,108,0.025) 0px, rgba(217,178,108,0.025) 1px, transparent 1px, transparent 64px),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--lo);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--violet); color:#0b100f; }
+
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:6px; border:2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--violet-dim); }
+  html{ scrollbar-color:var(--line) var(--bg); scrollbar-width:thin; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--violet);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    display:flex;
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    position:fixed;
+    width:min(38vw, 460px);
+    height:100vh;
+    padding:64px 56px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .side-top .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.15em;
+    color:var(--violet);
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .side-top .eyebrow .pulse-dot{
+    width:6px; height:6px; border-radius:50%; background:var(--signal);
+    box-shadow:0 0 0 0 var(--signal-dim);
+    animation:pulseDot 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseDot{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(147,201,168,0.45); }
+    50%{ box-shadow:0 0 0 5px rgba(147,201,168,0); }
+  }
+  .side-top h1{
+    font-family:var(--display);
+    font-size:clamp(32px, 3.4vw, 44px);
+    background:linear-gradient(120deg, var(--hi) 35%, var(--violet) 78%, var(--coral) 105%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    font-weight:700;
+    line-height:1.1;
+    margin-bottom:12px;
+  }
+  .side-top h2{
+    font-family:var(--display);
+    font-size:clamp(16px, 1.6vw, 19px);
+    color:var(--lo);
+    font-weight:500;
+    margin-bottom:22px;
+  }
+  .side-top p.blurb{
+    font-size:14.5px;
+    color:var(--lo-dim);
+    max-width:340px;
+  }
+
+  nav.side-nav{ margin-top:56px; }
+  nav.side-nav ul{ list-style:none; }
+  nav.side-nav li{ margin-bottom:18px; }
+  nav.side-nav a{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--lo-dim);
+    transition:color .25s ease;
+  }
+  nav.side-nav a .dash{
+    height:1px; width:28px; background:var(--lo-dim);
+    transition:width .25s ease, background .25s ease;
+  }
+  nav.side-nav a:hover, nav.side-nav a.active{ color:var(--hi); }
+  nav.side-nav a:hover .dash, nav.side-nav a.active .dash{
+    width:50px; background:var(--violet);
+  }
+
+  .side-bottom{ display:flex; flex-direction:column; gap:20px; }
+  .socials{ display:flex; gap:22px; }
+  .socials a{ color:var(--lo-dim); transition:color .2s ease, transform .2s ease; }
+  .socials a:hover{ color:var(--violet); transform:translateY(-3px); }
+  .contact-line{ font-family:var(--mono); font-size:12px; color:var(--lo-dim); }
+  .contact-line a:hover{ color:var(--violet); }
+
+  /* ---------- MAIN ---------- */
+  main{
+    margin-left:min(38vw, 460px);
+    width:100%;
+    padding:64px 64px 120px;
+  }
+
+  .hero-canvas-shell{
+    position:relative;
+    height:100vh; min-height:540px; max-height:820px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--bg);
+    overflow:hidden;
+    margin-bottom:90px;
+  }
+  .hero-canvas-shell canvas{ display:block; width:100%; height:100%; outline:none; }
+
+  .intro-gate{
+    position:absolute; inset:0; z-index:6;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
+    background:rgba(11,16,15,0.78);
+    backdrop-filter:blur(3px);
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  .intro-gate.hidden{ opacity:0; visibility:hidden; }
+  .intro-gate .load-label{
+    font-family:var(--mono); font-size:11px; color:var(--lo-dim);
+    letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .intro-gate .loadbar{ width:220px; height:3px; background:var(--line); border-radius:2px; overflow:hidden; }
+  .intro-gate .loadbar-fill{ height:100%; width:0%; background:var(--violet); transition:width .15s ease; }
+  .intro-gate .start-btn{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--hi); border:1px solid var(--violet); padding:13px 28px; border-radius:30px;
+    background:var(--violet-dim); cursor:pointer; opacity:0; transition:opacity .35s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .intro-gate .start-btn.show{ opacity:1; pointer-events:auto; }
+  .intro-gate .start-btn:hover{ transform:translateY(-2px); background:rgba(217,178,108,0.22); }
+
+  .intro-hint{
+    position:absolute; left:16px; bottom:16px; z-index:3;
+    display:inline-flex; align-items:center; flex-wrap:wrap; gap:7px 10px;
+    max-width:calc(100% - 32px);
+    background:rgba(11,16,15,0.88); backdrop-filter:blur(4px);
+    border:1px solid var(--line); border-radius:10px;
+    padding:9px 14px;
+    font-family:var(--mono); font-size:11.5px; color:var(--hi); line-height:1.4;
+  }
+  .intro-hint .kbd-row{ display:inline-flex; gap:4px; align-items:center; }
+  .intro-hint kbd{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:20px; height:20px; padding:0 5px;
+    font-family:var(--mono); font-size:10px; font-weight:600; color:var(--hi);
+    background:var(--violet-dim); border:1px solid var(--violet); border-radius:4px;
+  }
+  .intro-hint .divider{ color:var(--lo-dim); }
+  .intro-hint .desc{ color:var(--lo); }
+  .intro-hint .mobile-only{ display:none; }
+
+  .intro-toast{
+    position:absolute; top:20px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:12px; letter-spacing:0.05em; color:var(--hi);
+    background:rgba(16,22,20,0.85); border:1px solid var(--violet);
+    padding:8px 18px; border-radius:20px; z-index:4;
+    opacity:0; transition:opacity .3s ease, transform .3s ease;
+  }
+  .intro-toast.show{ opacity:1; transform:translateX(-50%) translateY(4px); }
+
+  .portal-labels{ position:absolute; inset:0; pointer-events:none; z-index:2; }
+
+  .hud-compass{
+    position:absolute; top:18px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:8px; z-index:3;
+    font-family:var(--mono); font-size:11px; color:var(--lo-dim);
+    background:rgba(16,22,20,0.6); border:1px solid var(--line);
+    padding:6px 14px; border-radius:20px; opacity:0; transition:opacity .3s ease;
+  }
+  .hud-compass.show{ opacity:1; }
+  .hud-compass .arrow{ color:var(--violet); display:inline-block; transition:transform .1s linear; }
+
+  .portal-label{
+    position:absolute; transform:translate(-50%,-100%);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--hi); background:rgba(16,22,20,0.68); border:1px solid var(--line);
+    padding:5px 11px; border-radius:20px; pointer-events:none; white-space:nowrap; z-index:2;
+    opacity:0; transition:opacity .25s ease, transform .25s ease;
+  }
+  .portal-label .n{ color:var(--violet); margin-right:6px; }
+
+  .dpad{ position:absolute; right:18px; bottom:18px; z-index:4; display:none; }
+  .dpad.show{ display:grid; grid-template-columns:repeat(3,42px); grid-template-rows:repeat(3,42px); gap:6px; }
+  .dpad button{
+    background:rgba(217,178,108,0.15); border:1px solid var(--line); border-radius:8px;
+    color:var(--hi); font-size:15px; -webkit-tap-highlight-color:transparent;
+  }
+  .dpad button:active{ background:var(--violet-dim); }
+
+  section{ margin-bottom:100px; scroll-margin-top:40px; }
+  .section-head{
+    display:flex; align-items:center; gap:16px;
+    margin-bottom:36px;
+  }
+  .section-head .chan{
+    display:inline-flex; align-items:center; gap:8px; flex-shrink:0;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em;
+    color:var(--lo-dim); background:var(--bg-panel); border:1px solid var(--line);
+    padding:6px 12px 6px 9px; border-radius:20px;
+    transition:color .3s ease, border-color .3s ease;
+  }
+  .section-head .chan-dot{
+    width:6px; height:6px; border-radius:50%; background:var(--lo-dim);
+    transition:background .3s ease;
+  }
+  .section-head .chan.live{ color:var(--violet); border-color:var(--violet-dim); }
+  .section-head .chan.live .chan-dot{
+    background:var(--signal); box-shadow:0 0 0 3px var(--signal-dim);
+    animation:pulseDot 2.2s ease-in-out infinite;
+  }
+  .section-head h3{
+    font-family:var(--display);
+    font-size:24px;
+    color:var(--hi);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .section-head .rule{ height:1px; flex:1; background:linear-gradient(90deg, var(--line), transparent 92%); }
+
+  /* ABOUT */
+  #about p{ max-width:640px; font-size:15.5px; color:var(--lo); margin-bottom:16px; }
+  #about p .accent{ color:var(--hi); }
+
+  /* EXPERIENCE */
+  .exp-item{
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:24px;
+    padding:26px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .exp-item:first-child{ padding-top:0; }
+  .exp-date{
+    font-family:var(--mono); font-size:12.5px; color:var(--lo-dim); padding-top:3px;
+  }
+  .exp-role h4{ font-family:var(--display); font-size:17px; color:var(--hi); font-weight:600; margin-bottom:2px; }
+  .exp-role .org{ font-size:14px; color:var(--violet); margin-bottom:12px; display:block; }
+  .exp-role ul{ list-style:none; margin-bottom:14px; }
+  .exp-role li{ position:relative; padding-left:18px; font-size:14.5px; color:var(--lo); margin-bottom:8px; }
+  .exp-role li::before{ content:"▹"; position:absolute; left:0; color:var(--violet); font-size:12px; top:2px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family:var(--mono); font-size:11px; color:var(--lo);
+    background:var(--violet-dim); border:1px solid var(--line);
+    padding:4px 10px; border-radius:20px;
+    transition:border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .tag:hover{ border-color:var(--violet); color:var(--hi); transform:translateY(-1px); }
+
+  /* PROJECTS */
+  .proj-grid{ display:flex; flex-direction:column; gap:2px; }
+  .proj-card{
+    position:relative; overflow:hidden;
+    display:grid; grid-template-columns:1fr auto; gap:20px;
+    padding:28px 26px;
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    margin-bottom:18px;
+    transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .proj-card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--violet), var(--coral));
+    transform:scaleX(0); transform-origin:left; transition:transform .35s ease;
+  }
+  .proj-card:hover{
+    border-color:var(--violet); transform:translateY(-3px);
+    box-shadow:0 16px 32px -20px rgba(217,178,108,0.35);
+  }
+  .proj-card:hover::before{ transform:scaleX(1); }
+  .proj-card h4{ font-family:var(--display); font-size:18px; color:var(--hi); font-weight:600; margin-bottom:4px; }
+  .proj-card .metric{ font-family:var(--mono); font-size:11.5px; color:var(--coral); margin-bottom:12px; display:inline-block; }
+  .proj-card p{ font-size:14.5px; color:var(--lo); margin-bottom:14px; max-width:520px; }
+  .proj-card .link-line{ font-family:var(--mono); font-size:12px; }
+  .proj-card .link-line a{ color:var(--lo-dim); border-bottom:1px solid transparent; }
+  .proj-card .link-line a:hover{ color:var(--violet); border-color:var(--violet); }
+  .proj-side{ display:flex; align-items:flex-start; }
+  .proj-side .tag-row{ max-width:150px; justify-content:flex-end; }
+
+  /* SKILLS */
+  .skills-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:30px 50px; }
+  .skill-cat h5{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--violet); margin-bottom:14px;
+  }
+  .skill-cat .tag-row .tag{ background:transparent; }
+
+  /* EDUCATION */
+  .edu-item{
+    display:grid; grid-template-columns:1fr auto; gap:20px;
+    padding:20px 0; border-bottom:1px solid var(--line-soft);
+  }
+  .edu-item:first-child{ padding-top:0; }
+  .edu-item h4{ font-family:var(--display); font-size:16px; color:var(--hi); font-weight:600; }
+  .edu-item .sub{ font-size:13.5px; color:var(--lo-dim); margin-top:3px; }
+  .edu-item .score{ font-family:var(--mono); font-size:13px; color:var(--violet); text-align:right; }
+  .edu-item .yr{ font-family:var(--mono); font-size:11.5px; color:var(--lo-dim); text-align:right; display:block; margin-top:4px; }
+
+  /* CERTS / EXTRA */
+  .flat-list{ list-style:none; }
+  .flat-list li{
+    position:relative; padding-left:22px; font-size:14.5px; color:var(--lo);
+    margin-bottom:14px; max-width:600px;
+  }
+  .flat-list li::before{ content:"◆"; position:absolute; left:0; color:var(--violet); font-size:10px; top:5px; }
+  .flat-list li strong{ color:var(--hi); font-weight:600; }
+
+  .langs{ display:flex; gap:10px; margin-top:6px; }
+
+  footer{
+    font-family:var(--mono); font-size:12px; color:var(--lo-dim);
+    padding-top:40px; border-top:1px solid var(--line);
+    transition:opacity .5s ease;
+  }
+  footer.locked{ opacity:0.35; }
+  footer .build-stamp{
+    margin-top:8px; font-size:10.5px; color:var(--lo-dim); opacity:0.6; letter-spacing:0.03em;
+  }
+
+  /* ---------- GATED CONTENT (unlocks as the car visits each portal) ---------- */
+  .gated .sec-body{ display:none; }
+  .gated.unlocked .sec-body{ display:block; animation:secReveal .55s ease; }
+  .gated.unlocked .lock-panel{ display:none; }
+  @keyframes secReveal{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
+
+  .lock-panel{
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    padding:54px 24px; border:1px solid var(--line); border-radius:6px;
+    text-align:center;
+    background:
+      repeating-linear-gradient(90deg, rgba(217,178,108,0.035) 0px, rgba(217,178,108,0.035) 1px, transparent 1px, transparent 22px),
+      var(--bg-panel);
+  }
+  .lock-panel::before{
+    content:''; position:absolute; top:0; bottom:0; left:-45%; width:45%;
+    background:linear-gradient(90deg, transparent, rgba(217,178,108,0.09), transparent);
+    animation:scanSweep 3.6s ease-in-out infinite;
+  }
+  @keyframes scanSweep{ 0%{ left:-45%; } 100%{ left:100%; } }
+  .lock-panel .waveform{ width:64px; height:26px; opacity:0.75; position:relative; }
+  .lock-panel .signal-label{
+    font-family:var(--mono); font-size:10px; letter-spacing:0.18em; color:var(--lo-dim);
+    text-transform:uppercase; display:flex; align-items:center; gap:7px; position:relative;
+  }
+  .lock-panel .signal-label .dot{ width:5px; height:5px; border-radius:50%; background:var(--coral); }
+  .lock-panel p{
+    font-family:var(--mono); font-size:12.5px; color:var(--lo-dim);
+    letter-spacing:0.02em; max-width:360px; position:relative;
+  }
+  .lock-panel .lock-tag{ color:var(--violet); }
+  .skip-link{
+    font-family:var(--mono); font-size:11.5px; color:var(--lo-dim);
+    border-bottom:1px dashed var(--lo-dim); cursor:pointer; margin-top:4px;
+    background:none; border-top:none; border-left:none; border-right:none;
+    padding:0 0 2px;
+  }
+  .skip-link:hover{ color:var(--violet); border-color:var(--violet); }
+
+  .side-nav a.locked{ color:var(--lo-dim); opacity:0.55; }
+  .side-nav a .lock-dot{
+    width:5px; height:5px; border-radius:50%; background:var(--lo-dim);
+    margin-left:2px; transition:background .2s ease;
+  }
+  .side-nav a.unlocked-nav .lock-dot{ background:var(--violet); }
+
+  /* fallback: if JS never runs, never trap the visitor behind a locked page */
+  html.no-js .gated .sec-body{ display:block; }
+  html.no-js .lock-panel{ display:none; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px){
+    .wrap{ display:block; }
+    .sidebar{ position:relative; width:100%; height:auto; padding:32px 20px 20px; }
+    main{ margin-left:0; width:100%; padding:0 20px 90px; }
+    .side-top p.blurb{ max-width:100%; }
+
+    /* nav becomes a horizontally-scrollable pill strip instead of disappearing */
+    nav.side-nav{
+      margin-top:26px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      -webkit-mask-image:linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+      mask-image:linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+    }
+    nav.side-nav::-webkit-scrollbar{ display:none; }
+    nav.side-nav ul{ display:flex; gap:8px; padding:2px 4px 6px; width:max-content; }
+    nav.side-nav li{ margin-bottom:0; flex:0 0 auto; }
+    nav.side-nav a{
+      gap:8px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:9px 14px;
+      background:var(--bg-panel);
+      white-space:nowrap;
+    }
+    nav.side-nav a .dash{ display:none; }
+    nav.side-nav a:hover, nav.side-nav a.active{ border-color:var(--violet); }
+
+    .side-bottom{ margin-top:28px; flex-direction:row; align-items:center; justify-content:space-between; }
+
+    .exp-item, .proj-card{ grid-template-columns:1fr; }
+    .exp-item{ gap:8px; }
+    .proj-side .tag-row{ justify-content:flex-start; max-width:100%; margin-top:4px; }
+    .skills-grid{ grid-template-columns:1fr; gap:26px; }
+
+    .edu-item{ grid-template-columns:1fr; gap:8px; }
+    .edu-item > div:last-child{ display:flex; align-items:center; gap:12px; }
+    .edu-item .score{ text-align:left; }
+    .edu-item .yr{ text-align:left; margin-top:0; }
+
+    .proj-card{ padding:22px 20px; }
+
+    .hero-canvas-shell{
+      height:min(72vh, 620px); min-height:440px; margin-bottom:48px;
+      touch-action:none; /* let our own drag-steering handle touches instead of page scroll */
+    }
+    section{ margin-bottom:56px; }
+    section .section-head h3{ font-size:20px; }
+    .lock-panel{ padding:40px 18px; }
+
+    .intro-hint{ font-size:10.5px; left:14px; bottom:12px; max-width:calc(100% - 130px); padding:8px 12px; }
+    .intro-hint .desktop-only{ display:none; }
+    .intro-hint .mobile-only{ display:inline; }
+    .hud-compass{ top:12px; font-size:10px; padding:5px 12px; }
+    .intro-toast{ font-size:11px; padding:7px 14px; top:14px; }
+    .intro-gate .start-btn{ padding:14px 26px; font-size:12.5px; }
+
+    .dpad{ right:12px; bottom:12px; }
+    .dpad.show{ grid-template-columns:repeat(3,52px); grid-template-rows:repeat(3,52px); gap:8px; }
+    .dpad button{ font-size:18px; border-radius:10px; }
+  }
+
+  @media (max-width: 480px){
+    .sidebar{ padding:26px 16px 16px; }
+    main{ padding:0 16px 80px; }
+    .side-bottom{ flex-direction:column; align-items:flex-start; gap:16px; }
+    .side-top h1{ font-size:28px; }
+    .side-top h2{ font-size:15px; }
+    .side-top p.blurb{ font-size:13.5px; }
+    nav.side-nav a{ font-size:11px; padding:8px 12px; }
+    .socials{ gap:18px; }
+    .socials a svg{ width:20px !important; height:20px !important; }
+    .contact-line{ font-size:11px; }
+
+    section{ margin-bottom:44px; }
+    .section-head{ gap:12px; margin-bottom:26px; }
+    .section-head .chan{ font-size:10px; padding:5px 10px 5px 8px; }
+    section .section-head h3{ font-size:18px; }
+    #about p{ font-size:14.5px; }
+    .proj-card h4{ font-size:16.5px; }
+    .proj-card p{ font-size:14px; }
+    .exp-role h4{ font-size:16px; }
+
+    .hero-canvas-shell{ height:min(64vh, 520px); min-height:400px; border-radius:4px; }
+    .intro-hint{ font-size:9.5px; max-width:calc(100% - 108px); padding:7px 10px; bottom:10px; left:10px; }
+    .hud-compass{ top:10px; font-size:9.5px; padding:4px 10px; gap:6px; }
+    .dpad.show{ grid-template-columns:repeat(3,48px); grid-template-rows:repeat(3,48px); gap:6px; }
+    .lock-panel p{ font-size:11.5px; }
+  }
+
+  @media (max-width: 360px){
+    .side-top h1{ font-size:25px; }
+    .dpad.show{ grid-template-columns:repeat(3,42px); grid-template-rows:repeat(3,42px); gap:5px; }
+  }
+
+  @media (hover:none) and (pointer:coarse){
+    .dpad button{ padding:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .pulse-dot, .chan.live .chan-dot, .lock-panel::before{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="side-top">
+      <div class="eyebrow"><span class="pulse-dot"></span>Portfolio / 2026</div>
+      <h1>Shravya<br>Shetty</h1>
+      <h2>Software Engineer — MERN &amp; Applied ML</h2>
+      <p class="blurb">I build secure, data-driven web applications — from authenticated MERN dashboards to ML models that turn raw signals into predictions.</p>
+
+      <nav class="side-nav" aria-label="Section navigation">
+        <ul>
+          <li><a href="#about" class="locked"><span class="dash"></span>About<span class="lock-dot"></span></a></li>
+          <li><a href="#experience" class="locked"><span class="dash"></span>Experience<span class="lock-dot"></span></a></li>
+          <li><a href="#projects" class="locked"><span class="dash"></span>Projects<span class="lock-dot"></span></a></li>
+          <li><a href="#skills" class="locked"><span class="dash"></span>Skills<span class="lock-dot"></span></a></li>
+          <li><a href="#education" class="locked"><span class="dash"></span>Education<span class="lock-dot"></span></a></li>
+          <li><a href="#more" class="locked"><span class="dash"></span>More<span class="lock-dot"></span></a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="side-bottom">
+      <div class="socials" aria-label="Social links">
+        <a href="https://github.com/shravyashetty04" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/shravya-shetty-064079244" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 11v5M8 8v.01M12 16v-5m0 0c0-1.5 1-2.5 2.5-2.5S17 9.5 17 11v5"/></svg>
+        </a>
+        <a href="mailto:shravyashetty415@gmail.com" aria-label="Email">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        </a>
+      </div>
+      <div class="contact-line">
+        <a href="mailto:shravyashetty415@gmail.com">shravyashetty415@gmail.com</a><br>
+        +91 89513 71623
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="hero-canvas-shell" id="heroCanvasShell" tabindex="0">
+      <div class="intro-gate" id="introGate">
+        <div class="load-label" id="loadLabel">booting engine…</div>
+        <div class="loadbar"><div class="loadbar-fill" id="loadbarFill"></div></div>
+        <button class="start-btn" id="startBtn">Click to drive →</button>
+        <button class="skip-link" id="skipAllBtn">Skip driving — unlock everything</button>
+      </div>
+      <div class="intro-toast" id="introToast"></div>
+      <div class="hud-compass" id="hudCompass"><span class="arrow" id="hudArrow">▲</span><span id="hudText">About · 12m</span></div>
+      <div class="portal-labels" id="portalLabels"></div>
+      <div id="introError" style="display:none; position:absolute; inset:0; z-index:9; background:#0b100f; color:#d98f6b; font-family:'JetBrains Mono',monospace; font-size:12px; padding:24px; overflow:auto;"></div>
+      <div class="intro-hint" id="introHint" style="display:none;">
+        <span class="kbd-row desktop-only"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
+        <span class="divider desktop-only">/</span>
+        <span class="kbd-row desktop-only"><kbd>▲</kbd><kbd>◀</kbd><kbd>▼</kbd><kbd>▶</kbd></span>
+        <span class="desc desktop-only">to drive</span>
+        <span class="desc mobile-only">Use the arrows below to drive</span>
+        <span class="divider">·</span>
+        <span class="desc">drive into a ring to jump to that section</span>
+      </div>
+      <div class="dpad" id="dpad">
+        <div></div><button data-k="up">▲</button><div></div>
+        <button data-k="left">◀</button><div></div><button data-k="right">▶</button>
+        <div></div><button data-k="down">▼</button><div></div>
+      </div>
+    </div>
+
+    <section id="about" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·01</span><h3>About</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·01 · About</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+        <p>I'm a final-year Information Science &amp; Engineering student at <span class="accent">Global Academy of Technology, Bengaluru</span> (CGPA 9.03), working at the intersection of full-stack web development and applied machine learning.</p>
+        <p>My recent work spans <span class="accent">secure MERN-stack applications</span> with JWT/bcrypt authentication, <span class="accent">telemetry pipelines</span> decoding multi-protocol sensor data for automotive systems, and <span class="accent">ML models</span> for text classification and agricultural prediction. I like problems that need both a clean interface and a defensible dataset underneath it.</p>
+      </div>
+    </section>
+
+    <section id="experience" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·02</span><h3>Experience</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·02 · Experience</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+      <div class="exp-item">
+        <div class="exp-date">Apr — Jul 2026</div>
+        <div class="exp-role">
+          <h4>Project Intern</h4>
+          <span class="org">Autoliv India Pvt Ltd</span>
+          <ul>
+            <li>Engineered end-to-end data pipelines to decode and synchronize multi-protocol ROS 2 and MCAP telemetry streams, including IMU, CAN bus, ToF, and GNSS sensor inputs.</li>
+            <li>Mapped heterogeneous datasets into interactive Rerun visualization layouts for unified timeline analysis and real-time data diagnostics.</li>
+            <li>Developed a low-latency React dashboard with a custom drag-and-drop grid and pointer-overlay shields to run isolated WebAssembly frames without browser interference.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">ROS 2</span><span class="tag">MCAP</span><span class="tag">React</span><span class="tag">Rerun</span><span class="tag">WebAssembly</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Nov 2025 — Feb 2026</div>
+        <div class="exp-role">
+          <h4>Software Intern</h4>
+          <span class="org">Visionet Systems Private Limited</span>
+          <ul>
+            <li>Implemented a full-stack Learning Management System on a provided codebase to gain hands-on experience in modern web development.</li>
+            <li>Set up and deployed a Node.js/Express backend with MongoDB and integrated a React.js frontend using Material-UI.</li>
+            <li>Built authentication, role-based access control, course enrollment, assignments, and progress tracking with RESTful APIs and Redux state management.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span><span class="tag">React</span><span class="tag">Redux</span><span class="tag">Material-UI</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section id="projects" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·03</span><h3>Projects</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·03 · Projects</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+      <div class="proj-grid">
+        <div class="proj-card">
+          <div>
+            <h4>Secure University Portal System</h4>
+            <p>Role-based MERN dashboard for students and admins, with JWT/bcrypt authentication and real-time application-status tracking (Pending, Accepted, Rejected) behind robust privacy controls.</p>
+            <div class="link-line"><a href="https://github.com/shravyashetty04/University-Application-Status-Tracker" target="_blank" rel="noopener">github.com/shravyashetty04/University-Application-Status-Tracker →</a></div>
+          </div>
+          <div class="proj-side"><div class="tag-row"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span><span class="tag">JWT</span></div></div>
+        </div>
+
+        <div class="proj-card">
+          <div>
+            <h4>YouTube Spam Comment Detection</h4>
+            <span class="metric">90% classification accuracy</span>
+            <p>NLP-based spam detection system for YouTube comments, built to improve content-moderation efficiency at scale.</p>
+            <div class="link-line"><a href="https://github.com/shravyashetty04/youtube-spam-detector" target="_blank" rel="noopener">github.com/shravyashetty04/youtube-spam-detector →</a></div>
+          </div>
+          <div class="proj-side"><div class="tag-row"><span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">HTML/CSS</span></div></div>
+        </div>
+
+        <div class="proj-card">
+          <div>
+            <h4>Crop Yield Prediction Tool</h4>
+            <p>ML model predicting crop yield from rainfall, temperature, and pesticide data, with multi-source dataset preprocessing to improve accuracy and reliability.</p>
+            <div class="link-line"><a href="https://github.com/shravyashetty04/crop.yield" target="_blank" rel="noopener">github.com/shravyashetty04/crop.yield →</a></div>
+          </div>
+          <div class="proj-side"><div class="tag-row"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Scikit-learn</span></div></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section id="skills" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·04</span><h3>Skills</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·04 · Skills</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+      <div class="skills-grid">
+        <div class="skill-cat">
+          <h5>Programming</h5>
+          <div class="tag-row"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">JavaScript</span></div>
+        </div>
+        <div class="skill-cat">
+          <h5>Web Development</h5>
+          <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">Express.js</span></div>
+        </div>
+        <div class="skill-cat">
+          <h5>Databases</h5>
+          <div class="tag-row"><span class="tag">MySQL</span><span class="tag">MongoDB</span></div>
+        </div>
+        <div class="skill-cat">
+          <h5>Data Science &amp; ML</h5>
+          <div class="tag-row"><span class="tag">NumPy</span><span class="tag">Pandas</span><span class="tag">Matplotlib</span><span class="tag">Scikit-learn</span></div>
+        </div>
+        <div class="skill-cat">
+          <h5>Tools</h5>
+          <div class="tag-row"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Tableau (Basic)</span><span class="tag">VS Code</span></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section id="education" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·05</span><h3>Education</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·05 · Education</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+      <div class="edu-item">
+        <div>
+          <h4>BE, Information Science &amp; Engineering</h4>
+          <div class="sub">Global Academy of Technology, Bengaluru</div>
+        </div>
+        <div><span class="score">CGPA 9.03</span><span class="yr">2022 – 2026</span></div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <h4>Class XII</h4>
+          <div class="sub">Sri Venkatramana PU College, Udupi</div>
+        </div>
+        <div><span class="score">95%</span><span class="yr">2020 – 2022</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section id="more" class="gated">
+      <div class="section-head"><span class="chan"><span class="chan-dot"></span>CH·06</span><h3>More</h3><div class="rule"></div></div>
+      <div class="lock-panel">
+        <svg class="waveform" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 12 H20 L24 4 L28 20 L32 8 L36 12 H64" stroke="var(--lo-dim)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="signal-label"><span class="dot"></span>No signal</span>
+        <p>Drive into the <span class="lock-tag">CH·06 · More</span> portal to acquire this channel.</p>
+      </div>
+      <div class="sec-body">
+      <h5 style="font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--violet); margin-bottom:16px;">Certifications</h5>
+      <ul class="flat-list">
+        <li><strong>Web Development using HTML &amp; CSS Foundation Certification</strong> — Infosys Springboard</li>
+        <li><strong>Data Science, Machine Learning &amp; NLP Bootcamp</strong> — Udemy Certified</li>
+      </ul>
+
+      <h5 style="font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--violet); margin:32px 0 16px;">Community</h5>
+      <ul class="flat-list">
+        <li><strong>Inspire Club</strong> (Active Member) — organized and led technical workshops and community-building events.</li>
+        <li><strong>Adyamya Chetana Food Support Program</strong> (Volunteer) — participated in food distribution drives to underserved communities.</li>
+      </ul>
+
+      <h5 style="font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--violet); margin:32px 0 12px;">Languages</h5>
+      <div class="tag-row"><span class="tag">English</span><span class="tag">Kannada</span><span class="tag">Hindi</span></div>
+      </div>
+    </section>
+
+    <footer class="locked" id="siteFooter">
+      <div>Built with care — pipelines by day, portfolios by night. © 2026 Shravya Shetty.</div>
+      <div class="build-stamp">course_complete=true · channels=6/6 · rendered client-side</div>
+    </footer>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  /* ---------- Gated content reveal ---------- */
+  function unlockSection(id){
+    const sec = document.getElementById(id);
+    if(sec && !sec.classList.contains('unlocked')) sec.classList.add('unlocked');
+    const chan = sec ? sec.querySelector('.chan') : null;
+    if(chan) chan.classList.add('live');
+    const navLink = document.querySelector(`.side-nav a[href="#${id}"]`);
+    if(navLink){ navLink.classList.remove('locked'); navLink.classList.add('unlocked-nav'); }
+    if(document.querySelectorAll('main section.gated:not(.unlocked)').length === 0){
+      const footerEl = document.getElementById('siteFooter');
+      if(footerEl) footerEl.classList.remove('locked');
+    }
+  }
+  function unlockAll(){
+    document.querySelectorAll('main section.gated').forEach(sec => unlockSection(sec.id));
+  }
+  const skipAllBtn = document.getElementById('skipAllBtn');
+  if(skipAllBtn){
+    skipAllBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      unlockAll();
+      const about = document.getElementById('about');
+      if(about) about.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
+  /* ---------- Section nav highlighting ---------- */
+  const sections = document.querySelectorAll('main section');
+  const navLinks = document.querySelectorAll('.side-nav a');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        navLinks.forEach(l=>l.classList.remove('active'));
+        const link = document.querySelector(`.side-nav a[href="#${entry.target.id}"]`);
+        if(link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin:'-40% 0px -50% 0px', threshold:0 });
+  sections.forEach(s=>io.observe(s));
+
+  /* ---------- Bruno-Simon-style drivable 3D intro ---------- */
+  (function(){
+    try{
+    if(typeof THREE === 'undefined'){
+      throw new Error('three.js failed to load from the CDN (network/CSP blocked it).');
+    }
+    const shell        = document.getElementById('heroCanvasShell');
+    const gate         = document.getElementById('introGate');
+    const loadbarFill  = document.getElementById('loadbarFill');
+    const loadLabel    = document.getElementById('loadLabel');
+    const startBtn     = document.getElementById('startBtn');
+    const introHint    = document.getElementById('introHint');
+    const introToast   = document.getElementById('introToast');
+    const labelsLayer  = document.getElementById('portalLabels');
+    const dpad         = document.getElementById('dpad');
+    const hudCompass   = document.getElementById('hudCompass');
+    const hudArrow     = document.getElementById('hudArrow');
+    const hudText      = document.getElementById('hudText');
+    const isTouch      = matchMedia('(pointer: coarse)').matches;
+    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const BG = 0x0b100f, VIOLET = 0xd9b26c, CORAL = 0xd98f6b, GHOST = 0x3a4440, HI = 0xf4ece0;
+
+    /* ----- scene / camera / renderer ----- */
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(BG);
+    scene.fog = new THREE.Fog(BG, 22, 62);
+
+    const camera = new THREE.PerspectiveCamera(58, shell.clientWidth/shell.clientHeight, 0.1, 120);
+    const renderer = new THREE.WebGLRenderer({ antialias:true });
+    renderer.setSize(shell.clientWidth, shell.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    shell.insertBefore(renderer.domElement, gate);
+
+    scene.add(new THREE.AmbientLight(0xd9b26c, 0.6));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+    sun.position.set(8, 14, 6);
+    scene.add(sun);
+    const rim = new THREE.PointLight(CORAL, 0.6, 40);
+    rim.position.set(-8, 4, -6);
+    scene.add(rim);
+
+    /* ----- ground with grid texture ----- */
+    const gcanvas = document.createElement('canvas');
+    gcanvas.width = gcanvas.height = 512;
+    const gctx = gcanvas.getContext('2d');
+    gctx.fillStyle = '#101614'; gctx.fillRect(0,0,512,512);
+    gctx.strokeStyle = 'rgba(217,178,108,0.22)'; gctx.lineWidth = 1;
+    for(let i=0;i<=512;i+=32){
+      gctx.beginPath(); gctx.moveTo(i,0); gctx.lineTo(i,512); gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(0,i); gctx.lineTo(512,i); gctx.stroke();
+    }
+    const groundTex = new THREE.CanvasTexture(gcanvas);
+    groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
+    groundTex.repeat.set(16,20);
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(70, 90),
+      new THREE.MeshStandardMaterial({ map: groundTex, roughness:0.95 })
+    );
+    ground.rotation.x = -Math.PI/2;
+    ground.position.z = -20;
+    scene.add(ground);
+
+    /* ----- low-poly car ----- */
+    const car = new THREE.Group();
+    const bodyMat = new THREE.MeshStandardMaterial({ color: VIOLET, roughness:0.4, metalness:0.2 });
+    const cabinMat = new THREE.MeshStandardMaterial({ color: HI, roughness:0.3, transparent:true, opacity:0.85 });
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x141826, roughness:0.8 });
+
+    const chassis = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.5, 2.6), bodyMat);
+    chassis.position.y = 0.5;
+    car.add(chassis);
+    const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.5, 1.3), cabinMat);
+    cabin.position.set(0, 0.95, -0.1);
+    car.add(cabin);
+    const noseLight = new THREE.Mesh(new THREE.BoxGeometry(1.3,0.15,0.1), new THREE.MeshStandardMaterial({color:CORAL, emissive:CORAL, emissiveIntensity:0.6}));
+    noseLight.position.set(0,0.55,-1.3);
+    car.add(noseLight);
+
+    const wheelGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.32, 16);
+    const wheels = [];
+    [[-0.8,0.35,0.85],[0.8,0.35,0.85],[-0.8,0.35,-0.85],[0.8,0.35,-0.85]].forEach(p=>{
+      const w = new THREE.Mesh(wheelGeo, wheelMat);
+      w.rotation.z = Math.PI/2;
+      w.position.set(...p);
+      car.add(w);
+      wheels.push(w);
+    });
+    car.position.set(0, 0, 10);
+    scene.add(car);
+
+    /* ----- portals (nav destinations) laid out as a winding forward path ----- */
+    // car spawns at (0,0,10) facing -z, so every portal sits ahead of the start line
+    const portalDefs = [
+      { id:'about',      label:'About',      n:'01', color: VIOLET, x:-3,  z:-1,  geo:()=> new THREE.IcosahedronGeometry(0.7,0) },
+      { id:'experience', label:'Experience', n:'02', color: CORAL,  x:6,   z:-9,  geo:()=> new THREE.OctahedronGeometry(0.65,0) },
+      { id:'projects',   label:'Projects',   n:'03', color: VIOLET, x:-7,  z:-18, geo:()=> new THREE.TorusKnotGeometry(0.5,0.16,90,10) },
+      { id:'skills',     label:'Skills',     n:'04', color: GHOST,  x:6,   z:-27, geo:()=> new THREE.DodecahedronGeometry(0.62,0) },
+      { id:'education',  label:'Education',  n:'05', color: CORAL,  x:-5,  z:-36, geo:()=> new THREE.ConeGeometry(0.6,1.1,4) },
+      { id:'more',       label:'More',       n:'06', color: VIOLET, x:0,   z:-45, geo:()=> new THREE.SphereGeometry(0.55,8,8) },
+    ];
+    const portals = portalDefs.map((p)=>{
+      const pos = new THREE.Vector3(p.x, 0, p.z);
+
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.6, 0.1, 10, 32),
+        new THREE.MeshStandardMaterial({ color:p.color, emissive:p.color, emissiveIntensity:0.5, roughness:0.35 })
+      );
+      ring.position.copy(pos).setY(1.2);
+      ring.rotation.x = Math.PI/2;
+      scene.add(ring);
+
+      const glow = new THREE.PointLight(p.color, 1.1, 14);
+      glow.position.copy(pos).setY(1.6);
+      scene.add(glow);
+
+      const glyph = new THREE.Mesh(p.geo(), new THREE.MeshStandardMaterial({ color:p.color, wireframe:true }));
+      glyph.position.copy(pos).setY(2.7);
+      scene.add(glyph);
+
+      const labelEl = document.createElement('div');
+      labelEl.className = 'portal-label';
+      labelEl.innerHTML = `<span class="n">${p.n}</span>${p.label}`;
+      labelsLayer.appendChild(labelEl);
+
+      return { ...p, pos, ring, glyph, labelEl, cooldown:0, visited:false };
+    });
+
+    /* ----- controls ----- */
+    const keyState = { up:false, down:false, left:false, right:false };
+    const keyMap = {
+      ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down',
+      ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right'
+    };
+    let started = false;
+
+    window.addEventListener('keydown', (e)=>{
+      if(keyMap[e.code]){
+        keyState[keyMap[e.code]] = true;
+        if(started) e.preventDefault();
+      }
+    });
+    window.addEventListener('keyup', (e)=>{
+      if(keyMap[e.code]) keyState[keyMap[e.code]] = false;
+    });
+
+    // Always show on-screen controls as a guaranteed fallback — some preview/iframe
+    // contexts don't reliably forward keyboard events to the page.
+    dpad.classList.add('show');
+    dpad.querySelectorAll('button').forEach(btn=>{
+      const k = btn.dataset.k;
+      const on = (e)=>{ e.preventDefault(); e.stopPropagation(); keyState[k]=true; };
+      const off = (e)=>{ e.preventDefault(); e.stopPropagation(); keyState[k]=false; };
+      btn.addEventListener('touchstart', on, {passive:false});
+      btn.addEventListener('touchend', off);
+      btn.addEventListener('mousedown', on);
+      btn.addEventListener('mouseup', off);
+      btn.addEventListener('mouseleave', off);
+    });
+
+    let mouseDriving = false, mouseSteer = 0;
+    shell.addEventListener('mousedown', (e)=>{
+      if(!started || e.target.closest('.dpad')) return;
+      mouseDriving = true;
+      const rect = shell.getBoundingClientRect();
+      mouseSteer = ((e.clientX - rect.left) / rect.width - 0.5) * -2;
+    });
+    shell.addEventListener('mousemove', (e)=>{
+      if(!mouseDriving) return;
+      const rect = shell.getBoundingClientRect();
+      mouseSteer = ((e.clientX - rect.left) / rect.width - 0.5) * -2;
+    });
+    window.addEventListener('mouseup', ()=>{ mouseDriving = false; });
+    shell.addEventListener('touchstart', (e)=>{
+      if(!started || e.target.closest('.dpad')) return;
+      mouseDriving = true;
+      const rect = shell.getBoundingClientRect();
+      mouseSteer = ((e.touches[0].clientX - rect.left) / rect.width - 0.5) * -2;
+      e.preventDefault();
+    }, {passive:false});
+    shell.addEventListener('touchmove', (e)=>{
+      if(!mouseDriving || e.target.closest('.dpad')) return;
+      const rect = shell.getBoundingClientRect();
+      mouseSteer = ((e.touches[0].clientX - rect.left) / rect.width - 0.5) * -2;
+      e.preventDefault();
+    }, {passive:false});
+    window.addEventListener('touchend', ()=>{ mouseDriving = false; });
+
+    /* ----- loading gate ----- */
+    let progress = 0;
+    const loadTimer = setInterval(()=>{
+      progress += Math.random()*18 + 6;
+      if(progress >= 100){
+        progress = 100;
+        clearInterval(loadTimer);
+        loadLabel.textContent = 'engine ready';
+        startBtn.classList.add('show');
+      }
+      loadbarFill.style.width = progress + '%';
+    }, 140);
+
+    function beginDrive(){
+      if(started) return;
+      started = true;
+      gate.classList.add('hidden');
+      introHint.style.display = 'block';
+      hudCompass.classList.add('show');
+      shell.focus();
+    }
+    startBtn.addEventListener('click', beginDrive);
+    shell.addEventListener('click', ()=>{ if(progress>=100) beginDrive(); });
+    window.addEventListener('keydown', (e)=>{ if(progress>=100 && keyMap[e.code]) beginDrive(); });
+
+    /* ----- toast ----- */
+    let toastTimer;
+    function showToast(text){
+      introToast.textContent = text;
+      introToast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> introToast.classList.remove('show'), 1800);
+    }
+
+    /* ----- car physics (arcade-style) ----- */
+    let speed = 0, heading = Math.PI; // face toward center (portals) at start
+    const maxSpeed = 0.34, accel = 0.018, brake = 0.03, friction = 0.05, turnRate = 0.04;
+
+    const projected = new THREE.Vector3();
+    function updateLabels(){
+      if(!started){
+        // Idle wide orbit shows the whole course at once — all 6 labels would
+        // otherwise stack on top of each other near the horizon, so stay quiet
+        // until the visitor is actually driving and close enough to care.
+        portals.forEach(p=> p.labelEl.style.opacity = '0');
+        return;
+      }
+
+      const maxDist = 46;
+      const candidates = [];
+      portals.forEach(p=>{
+        projected.copy(p.pos).setY(3.1).project(camera);
+        const behind = projected.z > 1;
+        if(behind){ p.labelEl.style.opacity = '0'; return; }
+        const x = (projected.x * 0.5 + 0.5) * shell.clientWidth;
+        const y = (-projected.y * 0.5 + 0.5) * shell.clientHeight;
+        const dist = camera.position.distanceTo(p.pos);
+        if(dist > maxDist){ p.labelEl.style.opacity = '0'; return; }
+        candidates.push({ p, x, y, dist });
+      });
+
+      // Closer portals win screen-space collisions so labels never overlap.
+      candidates.sort((a,b)=> a.dist - b.dist);
+      const kept = [];
+      candidates.forEach(c=>{
+        const overlaps = kept.some(k => Math.abs(k.x - c.x) < 96 && Math.abs(k.y - c.y) < 28);
+        if(overlaps){ c.p.labelEl.style.opacity = '0'; return; }
+        kept.push(c);
+        const opacity = Math.max(0.4, Math.min(1, 1 - c.dist / maxDist));
+        const scale = Math.max(0.75, Math.min(1, 1 - c.dist / (maxDist * 1.6)));
+        c.p.labelEl.style.opacity = String(opacity);
+        c.p.labelEl.style.left = c.x + 'px';
+        c.p.labelEl.style.top = c.y + 'px';
+        c.p.labelEl.style.transform = `translate(-50%,-100%) scale(${scale})`;
+      });
+    }
+
+    let t = 0;
+    function animate(){
+      requestAnimationFrame(animate);
+      try{
+      t += 0.016;
+
+      if(started){
+        const driveForward = keyState.up || mouseDriving;
+        const driveBack = keyState.down;
+        if(driveForward) speed += accel;
+        else if(driveBack) speed -= brake;
+        else speed *= (1 - friction);
+        speed = Math.max(-maxSpeed*0.55, Math.min(maxSpeed, speed));
+
+        let turnInput = (keyState.left ? 1 : 0) - (keyState.right ? 1 : 0);
+        if(mouseDriving) turnInput = mouseSteer;
+        heading += turnInput * turnRate * (0.4 + Math.abs(speed)/maxSpeed*0.6);
+
+        car.position.x += Math.sin(heading) * speed;
+        car.position.z += Math.cos(heading) * speed;
+
+        // soft boundary (box around the path, not a circle around the origin)
+        if(car.position.x > 30){ car.position.x = 30; speed *= 0.5; }
+        if(car.position.x < -30){ car.position.x = -30; speed *= 0.5; }
+        if(car.position.z > 16){ car.position.z = 16; speed *= 0.5; }
+        if(car.position.z < -52){ car.position.z = -52; speed *= 0.5; }
+
+        car.rotation.y = heading;
+        wheels.forEach(w=> w.rotation.x -= speed*1.6);
+
+        // camera chase
+        const camDist = 6.4, camHeight = 3.2;
+        const desired = new THREE.Vector3(
+          car.position.x - Math.sin(heading)*camDist,
+          camHeight,
+          car.position.z - Math.cos(heading)*camDist
+        );
+        camera.position.lerp(desired, 0.07);
+        camera.lookAt(car.position.x, car.position.y + 0.9, car.position.z);
+
+        // portal collisions
+        portals.forEach(p=>{
+          p.cooldown = Math.max(0, p.cooldown - 1);
+          const d = Math.hypot(car.position.x - p.pos.x, car.position.z - p.pos.z);
+          if(d < 2.6 && p.cooldown === 0){
+            p.cooldown = 240;
+            const firstVisit = !p.visited;
+            p.visited = true;
+            showToast(firstVisit ? `Unlocked: ${p.label} →` : `Entering ${p.label} →`);
+            unlockSection(p.id);
+            const el = document.getElementById(p.id);
+            if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+          }
+        });
+
+        // compass HUD — point toward the nearest unvisited portal
+        const remaining = portals.filter(p=>!p.visited);
+        if(remaining.length){
+          let nearest = remaining[0], best = Infinity;
+          remaining.forEach(p=>{
+            const d = Math.hypot(car.position.x - p.pos.x, car.position.z - p.pos.z);
+            if(d < best){ best = d; nearest = p; }
+          });
+          const dx = nearest.pos.x - car.position.x, dz = nearest.pos.z - car.position.z;
+          const bearing = Math.atan2(dx, dz) - heading;
+          hudArrow.style.transform = `rotate(${bearing}rad)`;
+          hudText.textContent = `${nearest.label} · ${Math.round(best)}m`;
+        } else {
+          hudText.textContent = `Course complete — keep exploring`;
+        }
+      } else {
+        // idle establishing shot before drive starts — orbit above the middle of the course
+        camera.position.set(Math.sin(t*0.05)*24, 11, -22 + Math.cos(t*0.05)*24);
+        camera.lookAt(0, 1, -22);
+      }
+
+      if(!prefersReduced){
+        portals.forEach((p,i)=>{
+          p.glyph.rotation.x += 0.006 + i*0.0008;
+          p.glyph.rotation.y += 0.008;
+          p.glyph.position.y = 2.6 + Math.sin(t + i)*0.18;
+          p.ring.rotation.z += 0.003;
+        });
+      }
+
+      updateLabels();
+      renderer.render(scene, camera);
+      } catch(err){
+        const banner = document.getElementById('introError');
+        banner.style.display = 'block';
+        banner.textContent = 'Scene error: ' + err.message + '\n\n' + (err.stack || '');
+        console.error(err);
+        if(typeof unlockAll === 'function') unlockAll();
+      }
+    }
+    animate();
+
+    function onResize(){
+      const w = shell.clientWidth, h = shell.clientHeight;
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', onResize);
+    } catch(err){
+      console.error(err);
+      const gateEl = document.getElementById('introGate');
+      if(gateEl) gateEl.classList.add('hidden');
+      const banner = document.getElementById('introError');
+      if(banner){
+        banner.style.display = 'block';
+        banner.textContent = 'Setup error: ' + err.message + '\n\n' + (err.stack || '');
+      }
+      // Don't trap the visitor behind a locked page if the 3D scene couldn't start
+      if(typeof unlockAll === 'function') unlockAll();
+    }
+  })();
+</script>
+</body>
+</html>

@@ -222,7 +222,23 @@
     padding:6px 14px; border-radius:20px; opacity:0; transition:opacity .3s ease;
   }
   .hud-compass.show{ opacity:1; }
-  .hud-compass .arrow{ color:var(--violet); display:inline-block; transition:transform .1s linear; }
+  .hud-compass .arrow{ color:var(--violet); display:inline-block; transition:transform .18s cubic-bezier(.22,.61,.36,1); }
+
+  .replay-btn{
+    position:absolute; top:18px; right:18px; z-index:5;
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--lo); background:rgba(16,22,20,0.72); border:1px solid var(--line);
+    padding:7px 14px; border-radius:20px; cursor:pointer;
+    opacity:0; visibility:hidden; transform:translateY(-6px);
+    transition:opacity .35s ease, transform .35s cubic-bezier(.22,.61,.36,1), color .25s ease, border-color .25s ease, background .25s ease, visibility .35s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .replay-btn.show{ opacity:1; visibility:visible; transform:translateY(0); }
+  .replay-btn:hover{ color:var(--hi); border-color:var(--violet); background:var(--violet-dim); }
+  .replay-btn .spin{ display:inline-block; transition:transform .5s cubic-bezier(.22,.61,.36,1); }
+  .replay-btn:hover .spin, .replay-btn.spinning .spin{ transform:rotate(-360deg); }
+
 
   .portal-label{
     position:absolute; transform:translate(-50%,-100%);
